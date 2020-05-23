@@ -1,18 +1,41 @@
-/***************************
+﻿/***************************
 COPYRIGHT FETCH DEVELOPMENT,
 2020
 Enlightenment – COLLECTION
 OF NUMEROUS HANDY METHODS
 FOR UNIVERSAL PURPOSES
-VERSION 1.1
+VERSION 2.0
 
 LESTERRRY AUTHORSHIP
 ***************************/
 using System;
+using System.Net;
+using System.IO;
 namespace FetchDev
 {
     namespace Enlightenment
     {
+        public class Api
+        {
+            public class Request
+            {
+                public static string perform(string request)
+                {
+                    WebRequest request2 = WebRequest.Create(request);
+                    WebResponse response2 = request2.GetResponse();
+                    string answer = "";
+                    using (Stream stream2 = response2.GetResponseStream())
+                    {
+                        using (StreamReader reader2 = new StreamReader(stream2))
+                        {
+                            answer = reader2.ReadToEnd();
+                        }
+                    }
+                    response2.Close();
+                    return answer;
+                }
+            }
+        }
         public class FastConsole
         {
             public enum Dimension
@@ -177,7 +200,7 @@ namespace FetchDev
                 Console.WriteLine("INTERACTIVE MENU");
                 for (int i = 0; i < menuElements.Length; i++)
                 {
-                   if(menuElements[i] == "/")
+                    if (menuElements[i] == "/")
                     {
                         iOffset = i;
                         setOffset = true;
@@ -203,8 +226,8 @@ namespace FetchDev
                     }
                     else
                     {
-                        Console.Write("˩ " + (i + 1) + ". " + menuElements[i]) ;
-                        if (expanded) { if (i  == Array.IndexOf(menuElements, marker)) inexpand(i); else Console.WriteLine(); }
+                        Console.Write("˩ " + (i + 1) + ". " + menuElements[i]);
+                        if (expanded) { if (i == Array.IndexOf(menuElements, marker)) inexpand(i); else Console.WriteLine(); }
                         else Console.WriteLine();
                     }
 
@@ -226,16 +249,15 @@ namespace FetchDev
                 for (int i = 0; i < Misc.getMaxLength(menuElements) - menuElements[index].Length; i++)
                 {
                     Console.Write("–");
-                   
+
                 }
-                Console.WriteLine("¬");
                 int leftReference = Console.CursorLeft;
+                Console.WriteLine("¬");
                 Console.Write(" <<< 0");
-                Console.CursorTop = Console.CursorTop + 1;
                 for (int i = 0; i < secondLayerElements.Length; i++)
                 {
                     Console.CursorLeft = leftReference;
-                    Console.CursorTop = Console.CursorTop + 1;
+                    //Console.CursorTop = Console.CursorTop + 1;
                     Console.Write(i < secondLayerElements.Length - 1 ? "|" : "˩");
                     Console.WriteLine((i + 1) + ". " + secondLayerElements[i]);
                 }
@@ -262,18 +284,18 @@ namespace FetchDev
 
             public string getSelected(int key)
             {
-               
+
                 //if(iOffset != -1 && key > iOffset)
                 //{
                 //    return expanded ? secondLayerElements[key - 2] : menuElements[key - 2];
                 //}
                 //else
-                
-                    if (key != 0)
-                    {
-                        return expanded ? secondLayerElements[key - 1] : menuElements[key - 1];
-                    }
-                
+
+                if (key != 0)
+                {
+                    return expanded ? secondLayerElements[key - 1] : menuElements[key - 1];
+                }
+
                 return "back";
             }
         }
